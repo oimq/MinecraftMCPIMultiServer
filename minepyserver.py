@@ -127,6 +127,6 @@ def start_server(port) :
         e = 1
                         
 if __name__ == "__main__" :
-    print("Welcome to access Minecraft Code Avengers Server")
+    print("Welcome to access the Minecraft Server")
     start_server(int(input("Please enter the PORT number : ")))
     print("Server would be terminated. Bye.")
