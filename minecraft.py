@@ -1,7 +1,10 @@
-from mcpi.minecraft import Minecraft
+from mcpi.minecraft import Minecraft, CmdPositioner
+from mcpi.connection import Connection
 import time
 
 mw = Minecraft.create()
+conn = Connection("localhost", 4711)
+cmdp = CmdPositioner(conn, b"player")
 
 '''
 major functions
@@ -9,9 +12,9 @@ major functions
 
 def setpos(x, y, z) :
    return mw.player.setTilePos(x, y, z)
-   
-def getpos() :
-   return mw.player.getTilePos()
+
+def getpos(username = 0) :
+   return cmdp.getPos(username)
 
 def setblock(x, y, z, blockid, sub = 0) :
    return mw.setBlock(x, y, z, blockid, sub)

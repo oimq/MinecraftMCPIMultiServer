@@ -1,6 +1,5 @@
 from math import sin, cos, atan, pi
 from minepyclient import *
-from minecraft import getpos
 
 #coordinate : [ x, y, z ]
 
@@ -58,6 +57,10 @@ class Turtlem() :
                 self.pb = pb
                 self.th = th - 1
                 self.pd = pd
+                self.name = "admin"
+
+        def setname(self, _name) :
+                self.name = _name
 
         def getpos(self) :
                 x = self.turtle.pos[0]
@@ -132,9 +135,9 @@ class Turtlem() :
                 self.pb = _id
 
         def spawnturtle(self, size = 1) :
-                px = getpos().x
-                py = getpos().y
-                pz = getpos().z
+                px = getpos(self.name)[0]
+                py = getpos(self.name)[1]
+                pz = getpos(self.name)[2]
                 shell = [
                         [0, 1, 0, 0, 1, 0],
                         [-2, 1, 1, 2, 1, 5],
@@ -151,16 +154,25 @@ class Turtlem() :
                         setblock(px + p[0], py + p[1], pz + p[2], 4)
         
         def show(self) :
-                px = 176
-                py = 100
-                pz = 289
+                px = getpos(self.name)[0]
+                py = getpos(self.name)[1]
+                pz = getpos(self.name)[2]
+                for t in self.track :
+                        if t[3] :
+                                setblocks(
+                                        px + t[0][0], py + t[0][1], pz + t[0][2],
+                                        px + t[0][0] + t[2], py + t[0][1],
+                                        pz + t[0][2] + t[2], t[1])
+                self.track = list()
+                '''
+                # non setblocks mode
                 for t in self.track :
                         if t[3] :
                                 y = py + t[0][1]
                                 for x in range(int(px+t[0][0]), int(px+t[0][0]+t[2]+1), 1) :
                                         for z in range(int(pz + t[0][2]), int(pz + t[0][2] + t[2]), 1) :
                                                 setblock(x, y, z, t[1])
-                self.track = list()
+                '''
 
 
 turtle = Turtlem()           

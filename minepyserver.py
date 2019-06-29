@@ -5,11 +5,11 @@ import threading
 def convdatatofunc(data) :
         fname = data[0:data.index('(')]
         arglist = data[data.index('(')+1:data.index(')')].replace(" ", "").split(',')
-        arglist = list(map(lambda x : int(x) if x.replace('-', '').isdigit() else x, filter(lambda v : v != '', arglist)))
+        arglist = list(map(lambda x : float(x) if  (x.replace('-', '')).replace('.', '').isdigit() else x, filter(lambda v : v != '', arglist)))
         print('function :',fname, ', arguments :', arglist)
         print('------------------------------------------')
         return fname, arglist
-funclist = [setblock, setpos, getblock]
+funclist = [setblock, getpos, getblock, setblocks]
 '''
 funclist = [setpos, getpos, setblock, setblocks, getblock,
                     getblockwithdata, chat, setting, hit, hitlastest,
@@ -20,14 +20,17 @@ strlist = list(map(lambda x : str(x)[10:str(x).index(' at ')], funclist))
 datalist = {1:"stone", 41:"gold", 42:"iron", 57:"diamond"}
 playerlist = {}
 
-def communicate(sock, address) :
+def communicate(sock, address, setblocksflag) :
     while True :
         try :
             data = sock.recv(1024).decode()
             if not data : continue
-            print('data :',data)
+            if data == "exit" :
+                break
+            print('origin :', address, ', data :', data)
             fname, fargs = convdatatofunc(str(data))
             try :
+
                 if (fname == 'setblock') :
                     data = "anonymous"
                     for key in datalist :
@@ -37,6 +40,9 @@ def communicate(sock, address) :
                                    + str(fargs[0]) + "), y(" + str(fargs[1]) + "), z(" + str(fargs[2]) + ") ]"
                     if data == "anonymous" :
                         data = "Run failed... These blocks are only permitted : stone, gold, iron, diamond"
+                        if 0 in datalist :
+                            data += ", air"
+
                 elif (fname == 'getblock') :
                     results = funclist[strlist.index(fname)](*fargs)
                     if results == None :
@@ -44,10 +50,36 @@ def communicate(sock, address) :
                     else :
                         data = "Identified block ID : " + str(results) + ", position : [ x(" \
                                + str(fargs[0]) + "), y(" + str(fargs[1]) + "), z(" + str(fargs[2]) + ") ]"
+
+                elif (fname == 'getpos') :
+                    results = funclist[strlist.index(fname)](*fargs)
+                    if results == getpos() :
+                        data = "Run failed... Wrong username are received."
+                    else :
+                        data = str(results.x)+", "+str(results.y)+", "+str(results.z)
+
+                elif (fname == 'setblocks') :
+                    if setblocksflag :
+                        data = "anonymous"
+                        for key in datalist :
+                            if fargs[-1] == key :
+                                results = funclist[strlist.index(fname)](*fargs)
+                                data = "block " + datalist[key] + " is set, position : [ x1(" \
+                                       + str(fargs[0]) + "), y1(" + str(fargs[1]) + "), z1(" + str(fargs[2]) + "), x2(" \
+                                       + str(fargs[3]) + "), y2(" + str(fargs[4]) + "), z2(" + str(fargs[5]) + ") ]"
+                        if data == "anonymous" :
+                            data = "Run failed... These blocks are only permitted : stone, gold, iron, diamond"
+                            if 0 in datalist :
+                                data += ", air"
+                    else :
+                        data = "Sorry, the setblocks function are blocked now."
+
                 else :
                     data = "Run failed... Check the function name."
-            except:
-                    data = "Run failed... Check the code."
+            except Exception as e:
+                print("Wrong code execution :", e)
+                data = "Run failed... Check the code."
+
             sock.send(data.encode())
         except KeyboardInterrupt :
             print("KeyboardInterrupt occur, server is down")
@@ -55,19 +87,28 @@ def communicate(sock, address) :
         except Exception :
             print("error occur :", Exception)
             break
+    sock.send("The connection is over.".encode())
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    print("Close the connection : " + str(address))
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     sock.close()
 
-def communicate_with_client(sock, address) :
+def communicate_with_client(sock, address, setblocksflag) :
     global strlist, datalist, playerlist
-    print("Connection from: " + str(address))
-    communicate(sock, address)
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    print("Connection from : " + str(address))
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    communicate(sock, address, setblocksflag)
 
 def run_server(server_socket) :
-    print("------------- start server -------------")
+    setblocksflag = (input("Do you want to block the setblocks mode? (y or n) : ") == 'n')
+    if (input("Do you want to forbid the air block? (y or n) : ") == 'n') :
+        datalist[0] = "air"
+    print("-------------- start server --------------")
     server_socket.listen(5)
     while True :
             conn, address = server_socket.accept()
-            t = threading.Thread(target=communicate_with_client, args=(conn, address,))
+            t = threading.Thread(target=communicate_with_client, args=(conn, address, setblocksflag))
             t.daemon = True
             t.start()
 

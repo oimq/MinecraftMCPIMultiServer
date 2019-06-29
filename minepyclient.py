@@ -17,27 +17,38 @@ def client_program(msg):
     message = msg  # take input
     client_socket.send(message.encode())  # send message
     data = client_socket.recv(1024).decode()  # receive response
+    return data
 
-    return 'Received from server: ' + data  # show in terminal
-
+    #return 'Received from server : ' + data  # show in terminal
     #client_socket.close()  # close the connection
 
 def setblock(x, y, z, blockid) :
-        string = 'setblock('+str(x)+','+str(y)+','+str(z)+','+str(blockid)+')'
-        print(client_program(string))
+    string = 'setblock('+str(x)+','+str(y)+','+str(z)+','+str(blockid)+')'
+    print(client_program(string))
+
+def setblocks(x1, y1, z1, x2, y2, z2, blockid) :
+    string = 'setblocks('+str(x1)+','+str(y1)+','+str(z1)+','+str(x2)+','+str(y2)+','+str(z2)+','+str(blockid)+')'
+    print(client_program(string))
 
 def getblock(x, y, z) :
-        string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
-        print(client_program(string))
+    string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
+    print(client_program(string))
 
 def getblockid(x, y, z) :
-        string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
-        string = client_program(string)
-        return int(string.split(" ")[-1])
+    string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
+    string = client_program(string)
+    index = "ID : "
+    index = string.index(index)+len(index)
+    return int(string[index:index+1])
+
+def getpos(username) :
+    string = "getpos("+username+")"
+    string = client_program(string)
+    return list(map(float, string.split(", ")))
 
 client_socket = 0
 
-def init() :
+def init_set() :
     global client_socket
     print("Welcome to Minecraft Code Avengers Client Program.")
     print("-------------------------------------------------")
@@ -51,7 +62,7 @@ def init() :
         print(client_socket)
         print("Connection error. Please restart to server.", str(e))
 
-def init(host, port) :
+def init(host="localhost", port=10000) :
     global client_socket
     print("Welcome to Minecraft Code Avengers Client Program.")
     print("-------------------------------------------------")
@@ -61,6 +72,12 @@ def init(host, port) :
         print(client_socket)
         print("Connection error. Please restart to server.", str(e))
 
+import atexit
+@atexit.register
+def close_connection() :
+    global client_socket
+    print(client_program("exit"))
+    client_socket.close()
 
 if __name__ == "__main__" :
     init()
