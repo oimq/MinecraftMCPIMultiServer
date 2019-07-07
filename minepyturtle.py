@@ -75,13 +75,13 @@ class Turtlem() :
                 return [x, y, z]
         
         def forward(self, distance) :
-                for count in range(distance) :
+                for count in range(int(distance)) :
                         self.track.append([self.getroundpos(), self.pb, self.th, self. pd])
                         self.turtle.forward(1)
                 self.show()
                 
         def backward(self, distance) :
-                for count in range(distance) :
+                for count in range(int(distance)) :
                         self.track.append([self.getroundpos(), self.pb, self.th, self. pd])
                         self.turtle.backward(1)
                 self.show()
@@ -99,13 +99,13 @@ class Turtlem() :
                 self.turtle.forward(distance)
 
         def up(self, distance) :
-                for count in range(distance) :
+                for count in range(int(distance)) :
                         self.track.append([self.getroundpos(), self.pb, self.th, self. pd])
                         self.turtle.up(1)
                 self.show()
 
         def down(self, distance) :
-                for count in range(distance) :
+                for count in range(int(distance)) :
                         self.track.append([self.getroundpos(), self.pb, self.th, self. pd])
                         self.turtle.down(1)
                 self.show()
