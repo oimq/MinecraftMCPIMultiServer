@@ -41,10 +41,21 @@ def getblockid(x, y, z) :
     index = string.index(index)+len(index)
     return int(string[index:index+1])
 
-def getpos(username) :
+def setpos(x, y, z, username="default") :
+    string = "setpos("+username+','+str(x)+','+str(y)+','+str(z)+")"
+    print(client_program(string))
+
+def getpos(username="default") :
     string = "getpos("+username+")"
     string = client_program(string)
-    return list(map(float, string.split(", ")))
+    if string.startswith("Run") :
+        return None
+    else :
+        return list(map(float, string.split(", ")))
+
+def chat(msg) :
+    string = "chat("+msg+")"
+    print(client_program(string))
 
 client_socket = 0
 

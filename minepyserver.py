@@ -9,7 +9,7 @@ def convdatatofunc(data) :
         print('function :',fname, ', arguments :', arglist)
         print('------------------------------------------')
         return fname, arglist
-funclist = [setblock, getpos, getblock, setblocks]
+funclist = [setblock, getpos, getblock, setblocks, chat, setpos]
 '''
 funclist = [setpos, getpos, setblock, setblocks, getblock,
                     getblockwithdata, chat, setting, hit, hitlastest,
@@ -30,7 +30,6 @@ def communicate(sock, address, setblocksflag) :
             print('origin :', address, ', data :', data)
             fname, fargs = convdatatofunc(str(data))
             try :
-
                 if (fname == 'setblock') :
                     data = "anonymous"
                     for key in datalist :
@@ -54,9 +53,19 @@ def communicate(sock, address, setblocksflag) :
                 elif (fname == 'getpos') :
                     results = funclist[strlist.index(fname)](*fargs)
                     if results == getpos() :
-                        data = "Run failed... Wrong username are received."
+                        print("Wrong name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
+                        data = "Run failed... Wrong username are received : "+fargs[0]
                     else :
+                        print("Right name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
                         data = str(results.x)+", "+str(results.y)+", "+str(results.z)
+
+                elif (fname == 'setpos') :
+                    if getpos(fargs[0]) == getpos() :
+                        print("Wrong name : "+fargs[0])
+                        data = "Run failed... Wrong username are received : "+fargs[0]
+                    else :
+                        funclist[strlist.index(fname)](*fargs)
+                        data = "We set "+fargs[0]+" positiion to "+str(fargs[1])+', '+str(fargs[2])+', '+str(fargs[3])
 
                 elif (fname == 'setblocks') :
                     if setblocksflag :
@@ -73,6 +82,10 @@ def communicate(sock, address, setblocksflag) :
                                 data += ", air"
                     else :
                         data = "Sorry, the setblocks function are blocked now."
+
+                elif (fname == 'chat') :
+                    funclist[strlist.index(fname)](*fargs)
+                    data = fargs[0]
 
                 else :
                     data = "Run failed... Check the function name."

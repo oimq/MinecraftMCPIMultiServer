@@ -10,10 +10,10 @@ cmdp = CmdPositioner(conn, b"player")
 major functions
 '''
 
-def setpos(x, y, z) :
-   return mw.player.setTilePos(x, y, z)
+def setpos(username="default", x=100, y=100, z=100) :
+   return cmdp.setPos(username, x, y, z)
 
-def getpos(username = 0) :
+def getpos(username="default") :
    return cmdp.getPos(username)
 
 def setblock(x, y, z, blockid, sub = 0) :
