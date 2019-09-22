@@ -32,7 +32,7 @@ def setblocks(x1, y1, z1, x2, y2, z2, blockid) :
 
 def getblock(x, y, z) :
     string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
-    print(client_program(string))
+    return int(client_program(string))
 
 def getblockid(x, y, z) :
     string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'

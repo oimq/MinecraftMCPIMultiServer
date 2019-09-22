@@ -17,7 +17,7 @@ funclist = [setpos, getpos, setblock, setblocks, getblock,
                     getx, gety, getz]
 '''
 strlist = list(map(lambda x : str(x)[10:str(x).index(' at ')], funclist))
-datalist = {1:"stone", 41:"gold", 42:"iron", 57:"diamond"}
+datalist = {1:"stone", 41:"gold", 42:"iron", 57:"diamond", 8:"water", 9:"water", 27:"rail", 152:"redstone-block", 169:"sea_lantern"}
 playerlist = {}
 
 def communicate(sock, address, setblocksflag) :
@@ -47,8 +47,9 @@ def communicate(sock, address, setblocksflag) :
                     if results == None :
                         data = "Run failed... Check the function name."
                     else :
-                        data = "Identified block ID : " + str(results) + ", position : [ x(" \
-                               + str(fargs[0]) + "), y(" + str(fargs[1]) + "), z(" + str(fargs[2]) + ") ]"
+                        # data = "Identified block ID : " + str(results) + ", position : [ x(" \
+                        #        + str(fargs[0]) + "), y(" + str(fargs[1]) + "), z(" + str(fargs[2]) + ") ]"
+                        data = str(results)
 
                 elif (fname == 'getpos') :
                     results = funclist[strlist.index(fname)](*fargs)
@@ -85,7 +86,7 @@ def communicate(sock, address, setblocksflag) :
 
                 elif (fname == 'chat') :
                     funclist[strlist.index(fname)](*fargs)
-                    data = fargs[0]
+                    #data = fargs[0]
 
                 else :
                     data = "Run failed... Check the function name."
