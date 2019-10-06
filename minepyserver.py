@@ -17,7 +17,10 @@ funclist = [setpos, getpos, setblock, setblocks, getblock,
                     getx, gety, getz]
 '''
 strlist = list(map(lambda x : str(x)[10:str(x).index(' at ')], funclist))
-datalist = {1:"stone", 41:"gold", 42:"iron", 57:"diamond", 8:"water", 9:"water", 27:"rail", 152:"redstone-block", 169:"sea_lantern"}
+datalist = {1:"stone", 41:"gold", 42:"iron", 57:"diamond", 8:"water",
+            9:"water", 27:"rail", 152:"redstone-block", 169:"sea_lantern",
+            79:"ice", 46:"tnt", 10:"lava", 51:"fire", 17:"tree1", 18:"tree2", 103:"melon"
+            ,175:'flower'}
 playerlist = {}
 
 def communicate(sock, address, setblocksflag) :
@@ -53,20 +56,16 @@ def communicate(sock, address, setblocksflag) :
 
                 elif (fname == 'getpos') :
                     results = funclist[strlist.index(fname)](*fargs)
-                    if results == getpos() :
-                        print("Wrong name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
-                        data = "Run failed... Wrong username are received : "+fargs[0]
-                    else :
-                        print("Right name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
-                        data = str(results.x)+", "+str(results.y)+", "+str(results.z)
+                    print("Right name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
+                    data = str(results.x)+", "+str(results.y)+", "+str(results.z)
 
-                elif (fname == 'setpos') :
-                    if getpos(fargs[0]) == getpos() :
-                        print("Wrong name : "+fargs[0])
-                        data = "Run failed... Wrong username are received : "+fargs[0]
-                    else :
-                        funclist[strlist.index(fname)](*fargs)
-                        data = "We set "+fargs[0]+" positiion to "+str(fargs[1])+', '+str(fargs[2])+', '+str(fargs[3])
+                # elif (fname == 'setpos') :
+                #     if getpos(fargs[0]) == getpos() :
+                #         print("Wrong name : "+fargs[0])
+                #         data = "Run failed... Wrong username are received : "+fargs[0]
+                #     else :
+                #         funclist[strlist.index(fname)](*fargs)
+                #         data = "We set "+fargs[0]+" positiion to "+str(fargs[1])+', '+str(fargs[2])+', '+str(fargs[3])
 
                 elif (fname == 'setblocks') :
                     if setblocksflag :
