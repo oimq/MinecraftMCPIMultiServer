@@ -59,13 +59,13 @@ def communicate(sock, address, setblocksflag) :
                     print("Right name : "+str(results.x)+", "+str(results.y)+", "+str(results.z))
                     data = str(results.x)+", "+str(results.y)+", "+str(results.z)
 
-                # elif (fname == 'setpos') :
-                #     if getpos(fargs[0]) == getpos() :
-                #         print("Wrong name : "+fargs[0])
-                #         data = "Run failed... Wrong username are received : "+fargs[0]
-                #     else :
-                #         funclist[strlist.index(fname)](*fargs)
-                #         data = "We set "+fargs[0]+" positiion to "+str(fargs[1])+', '+str(fargs[2])+', '+str(fargs[3])
+                elif (fname == 'setpos') :
+                    if getpos(fargs[0]) == getpos() :
+                        print("Wrong name : "+fargs[0])
+                        data = "Run failed... Wrong username are received : "+fargs[0]
+                    else :
+                        funclist[strlist.index(fname)](*fargs)
+                        data = "We set "+fargs[0]+" positiion to "+str(fargs[1])+', '+str(fargs[2])+', '+str(fargs[3])
 
                 elif (fname == 'setblocks') :
                     if setblocksflag :
@@ -84,7 +84,7 @@ def communicate(sock, address, setblocksflag) :
                         data = "Sorry, the setblocks function are blocked now."
 
                 elif (fname == 'chat') :
-                    funclist[strlist.index(fname)](*fargs)
+                    funclist[strlist.index(fname)](data[5:-1])
                     #data = fargs[0]
 
                 else :

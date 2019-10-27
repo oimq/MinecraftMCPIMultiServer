@@ -149,9 +149,9 @@ class Turtlem() :
                         [2, 1, 5, 2, 0, 5],
                         [0, 1, 6, 0, 1, 6]]
                 for  p in shell :
-                        setblock(px + p[0], py + p[1], pz + p[2], 5)
+                        setblocks(px+p[0], py+p[1], pz+p[2], px+p[3], py+p[4], pz+p[5], 1)
                 for  p in body :
-                        setblock(px + p[0], py + p[1], pz + p[2], 4)
+                        setblocks(px+p[0], py+p[1], pz+p[2], px+p[3], py+p[4], pz+p[5], 57)
         
         def show(self) :
                 px = getpos(self.name)[0]
