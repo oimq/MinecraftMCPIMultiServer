@@ -3,11 +3,14 @@
 This is for test minepyclient, minepyturtle
 '''
 
-
-import time
 from minepyclient import *
-init("1.168.0.53", 10000)
-chat('hi! welcome to python.')
+init("192.168.1.102", 10000)
+setblocks(100, 100, 100, 102, 100, 102, 57)
+setpos(100, 105, 100, 'oimqA')
+chat("hello, minecraft!")
+print(getblock(100, 100, 100))
+print(getpos('oimqA'))
+print(getblockwithdata(105, 69, 102))
 
 # # lawn block
 # x1 = 339
@@ -39,12 +42,8 @@ chat('hi! welcome to python.')
 # chat("explosion!!!!!")
 #
 
-
-
-
-
-from minepyturtle import *
-init("1.168.0.53", 10000)
-turtle.setname("oimqA")
-turtle.spawnturtle()
-turtle.show()
+# from minepyturtle import *
+# init("1.168.0.53", 10000)
+# turtle.setname("oimqA")
+# turtle.spawnturtle()
+# turtle.show()
