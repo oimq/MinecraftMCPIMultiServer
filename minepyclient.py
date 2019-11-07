@@ -34,12 +34,10 @@ def getblock(x, y, z) :
     string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
     return int(client_program(string))
 
-def getblockid(x, y, z) :
-    string = 'getblock('+str(x)+','+str(y)+','+str(z)+')'
+def getblockwithdata(x, y, z) :
+    string = 'getblockwithdata('+str(x)+','+str(y)+','+str(z)+')'
     string = client_program(string)
-    index = "ID : "
-    index = string.index(index)+len(index)
-    return int(string[index:index+1])
+    return list(map(int, string.split(",")))
 
 def setpos(x, y, z, username="default") :
     string = "setpos("+username+','+str(x)+','+str(y)+','+str(z)+")"
@@ -48,10 +46,10 @@ def setpos(x, y, z, username="default") :
 def getpos(username="default") :
     string = "getpos("+username+")"
     string = client_program(string)
-    if string.startswith("Run") :
+    if string.startswith("Error") :
         return None
     else :
-        return list(map(float, string.split(", ")))
+        return list(map(float, string.split(",")))
 
 def chat(msg) :
     string = "chat("+msg+")"
